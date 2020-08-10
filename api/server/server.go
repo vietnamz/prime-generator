@@ -104,12 +104,12 @@ func (pageNotFoundError) NotFound() {}
 
 func (s *Server) createMux() *mux.Router  {
 	m := mux.NewRouter()
-	logrus.Debug("Registering routers")
+	logrus.Infof("Registering routers")
 	for _, apiRouter := range s.routes {
 		for _, r := range apiRouter.Routers() {
 			f := s.makeHTTPHandler(r.Handler())
-			logrus.Debugf("Registering %s, %s", r.Method(), r.Path())
-			m.Path(versionMatcher + r.Path()).Methods( r.Method()).Handler(f)
+			logrus.Infof("Registering %s, %s", r.Method(), r.Path())
+			m.Path(versionMatcher + r.Path()).Methods( r.Method()).Handler(f).Queries()
 			m.Path(r.Path()).Methods(r.Method()).Handler(f)
 		}
 	}

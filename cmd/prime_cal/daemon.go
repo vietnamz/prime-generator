@@ -10,18 +10,21 @@ import (
 	apiServer "github.com/vietnamz/prime-generator/api/server"
 	"github.com/vietnamz/prime-generator/api/server/middleware"
 	"github.com/vietnamz/prime-generator/api/server/router"
+	"github.com/vietnamz/prime-generator/api/server/router/prime"
 	systemRouter "github.com/vietnamz/prime-generator/api/server/router/system"
 	"github.com/vietnamz/prime-generator/cli/debug"
+	"github.com/vietnamz/prime-generator/daemon"
 	"os"
 	"runtime"
 	"strings"
 )
 
 type DaemonCli struct {
-	config *Config
+	config *daemon.Config
 	flags *pflag.FlagSet
 	api *apiServer.Server
 	Hosts []string
+	daemonConfig *daemon.Config
 }
 
 func NewDaemonCli() *DaemonCli  {
@@ -53,6 +56,7 @@ func (cli *DaemonCli) initMiddlewares( s *apiServer.Server, cfg *apiServer.Confi
 func initRouter( opts routerOptions) {
 	routers := []router.Router {
 		systemRouter.NewRouter(),
+		prime.NewRouter(opts.daemon),
 	}
 	opts.api.InitRouter(routers...)
 }
@@ -92,14 +96,14 @@ func loadListeners(cli *DaemonCli, serverConfig *apiServer.Config) ([]string, er
 	return hosts, nil
 }
 
-func (cli *DaemonCli) start(opts *Config) (err error )  {
+func (cli *DaemonCli) start(opts *daemon.Config) (err error )  {
 	logrus.Info("Start a daemon")
 	stopc := make(chan bool)
 	defer close(stopc)
 	logrus.Info("Starting up")
-	cli.flags = opts.flags
+	cli.flags = opts.Flags
 	cli.config = opts
-	if cli.config.logEnable {
+	if cli.config.LogEnable {
 		debug.Enable()
 	}
 	if runtime.GOOS == "linux" && os.Getegid() != 0 {
@@ -131,7 +135,7 @@ func (cli *DaemonCli) start(opts *Config) (err error )  {
 
 	logrus.Info("Daemon has completed initialization")
 
-	routerOptions, err := newRouterOptions(cli.config)
+	routerOptions, err := newRouterOptions(daemon.NewDaemon(cli.config))
 	if err != nil {
 		return err
 	}
@@ -152,8 +156,11 @@ func (cli *DaemonCli) start(opts *Config) (err error )  {
 
 type routerOptions struct {
 	api *apiServer.Server
+	daemon *daemon.Daemon
 }
 
-func newRouterOptions( config *Config ) (routerOptions, error)  {
-	return routerOptions{}, nil
+func newRouterOptions( d *daemon.Daemon ) (routerOptions, error)  {
+	return routerOptions{
+		daemon: d,
+	}, nil
 }
