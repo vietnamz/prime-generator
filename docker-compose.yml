@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  primeapp:
+    image: delgemoon/primeapp:develop-build
+    build:
+      context: ../../
+      dockerfile: ../../Dockerfile
+    ports:
+      - "8080:8080"
+    # export G_ID=$(id -g $(whoami))
+    # export U_ID=$(id -g $(whoami))
+    user: ${U_ID:-0}:${G_ID:-0}
+    tty: true
+    working_dir: /opt/app
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
