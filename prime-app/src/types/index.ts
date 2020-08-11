@@ -1,4 +1,4 @@
 export interface Prime {
-    prime: bigint,
+    value: string,
     elasedTime: number
 }

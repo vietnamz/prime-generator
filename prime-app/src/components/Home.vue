@@ -6,16 +6,22 @@
         </div>
         <div id="content">
             <div id="hr" class="human-readable" style="">
-                <i>
-                    0
-                </i>
+                <p>
+                    {{ largestPrime }}
+                </p>
             </div>
             <div class="text-editor">
-                <input id="input" type="text" value="" class="">
+                <input id="input" type="text" value="" class="" v-model="upperBound">
+<!--                       v-model.lazy="upperBound"
+                       @blur="$v.upperBound.$touch()">-->
+<!--                <template v-if="$v.upperBound.$error">
+                    <span v-if="!$v.upperBound.mustBeNumber" class="warning text-highlight">The input must be numeric</span>
+                    <span v-else-if="!$v.upperBound.mustBeLessThan64Bit" class="form-error">Sorry! Apps currently support upper bound from 2 to 18446744073709551611 ( 2^64 )</span>
+                </template>-->
             </div>
             <div class="part-explanation">
                 <p class="cron-parts">
-                <div><span class="clickable">The Largest Prime</span></div>
+                <div><span class="clickable" @click="takePrime">The Largest Prime</span></div>
             </div>
             <div class="warning"></div>
         </div>
@@ -23,12 +29,50 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
+// eslint-disable-next-line no-unused-vars
+import {Prime} from "@/types";
+import PrimeService from "../services/PrimeService";
+import { validationMixin } from 'vuelidate';
+import { helpers } from 'vuelidate/lib/validators';
+import bigInt from 'big-integer';
 
-@Component
-export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
-}
+const mustBeNumber = (value: string) => helpers.regex(value, RegExp('^[0-9]*$'))
+const mustBeLessThan64Bit = (value: string) => !mustBeNumber && !bigInt(value, 10).bitLength().greater( bigInt(64) )
+export default Vue.extend({
+    data() {
+        return {
+            prime: {} as Prime, // Declaring reactive data as type User
+            upperBound: {} as string
+        }
+    },
+    mixins: [validationMixin],
+    validations: {
+        upperBound: { mustBeNumber, mustBeLessThan64Bit },
+    },
+    mounted() {
+        this.prime = {
+            value: "0",
+            elasedTime: 0
+        };
+        this.upperBound = "0"
+    },
+    computed :{
+        largestPrime(): string {
+            return this.prime.value
+        }
+    },
+    methods: {
+        takePrime() : void {
+/*            this.$v.$touch()
+            if (this.$v.$invalid) {
+                console.log("No action")
+                return
+            }*/
+            PrimeService.get(this.upperBound).then( res => this.prime.value = res.data).catch( err => console.log(err))
+        }
+    }
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
