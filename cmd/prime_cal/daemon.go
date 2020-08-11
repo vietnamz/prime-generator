@@ -46,7 +46,8 @@ func newAPIServerConfig( cli *DaemonCli) (*apiServer.Config, error) {
 	return serverConfig, nil
 }
 
-func (cli *DaemonCli) initMiddlewares( s *apiServer.Server, cfg *apiServer.Config ) error {
+func (cli *DaemonCli) initMiddleware( s *apiServer.Server, cfg *apiServer.Config ) error {
+	logrus.Printf("init the cors middleware %s" , cfg.CorsHeader)
 	if cfg.CorsHeader != "" {
 		c := middleware.NewCORSMiddleware(cfg.CorsHeader)
 		s.UseMiddleware(c)
@@ -133,6 +134,7 @@ func (cli *DaemonCli) start(opts *daemon.Config) (err error )  {
 	}, logrus.StandardLogger())
 
 
+	cli.initMiddleware(cli.api, serverConfig)
 	logrus.Info("Daemon has completed initialization")
 
 	routerOptions, err := newRouterOptions(daemon.NewDaemon(cli.config))
