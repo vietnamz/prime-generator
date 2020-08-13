@@ -3,6 +3,7 @@ package daemon
 import (
 	"bytes"
 	"github.com/sirupsen/logrus"
+	"github.com/vietnamz/prime-generator/daemon/config"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -10,11 +11,11 @@ import (
 )
 
 type PrimeService struct {
-	cfg *Config
+	cfg *config.Config
 }
 
 // Constructor to initialize an prime generator srv.
-func newPrimeService(config *Config) *PrimeService{
+func newPrimeService(config *config.Config) *PrimeService{
 	return &PrimeService{
 		config,
 	}

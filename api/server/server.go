@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
@@ -20,6 +21,7 @@ type Config struct {
 	Logging bool
 	CorsHeader string
 	Version string
+	TLSConfig   *tls.Config
 }
 
 type Server struct {

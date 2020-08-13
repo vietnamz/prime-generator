@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/vietnamz/prime-generator/cli"
-	"github.com/vietnamz/prime-generator/daemon"
+	"github.com/vietnamz/prime-generator/daemon/config"
 	"io"
 	"os"
 )
@@ -14,13 +14,12 @@ import (
 func initLogging(_, stderr io.Writer )  {
 	logrus.SetOutput( stderr)
 }
-func runDaemon(opts *daemon.Config) (err error) {
+func runDaemon(opts *daemonOptions) (err error) {
 	daemonCli := NewDaemonCli()
-	fmt.Printf("%s", opts.Hosts)
 	return daemonCli.start(opts)
 }
 func newDaemonCommand() (*cobra.Command, error) {
-	opts := daemon.NewDaemonConfig()
+	opts := newDaemonOptions(config.NewDaemonConfig())
 	cmd := &cobra.Command{
 		Use: "Prime Generation [OPTIONS]",
 		Short: "A self-sufficent runtime for application",
@@ -28,14 +27,22 @@ func newDaemonCommand() (*cobra.Command, error) {
 		SilenceErrors: true,
 		Args: cli.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.Flags = cmd.Flags()
+			opts.flags = cmd.Flags()
 			return runDaemon(opts)
 		},
 		Version: fmt.Sprintf("%s, build %s", "1.0.0", "master"),
 	}
 	flags := cmd.Flags()
 	flags.BoolP("version", "v", false, "Print version information and quit")
+	defaultDaemonConfigFile, err := getDefaultDaemonConfigFile()
+	if err != nil {
+		return nil, err
+	}
+	flags.StringVar(&opts.configFile, "config-file", defaultDaemonConfigFile, "Daemon configuration file")
 	opts.InstallFlags(flags)
+	if err := installConfigFlags(opts.daemonConfig, flags); err != nil {
+		return nil, err
+	}
 	return cmd, nil
 }
 func main() {
