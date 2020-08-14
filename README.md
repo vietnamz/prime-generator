@@ -18,8 +18,33 @@ secondly, Logging is critical part. Should pay attention first to make sure, We 
 ```bash
 go build github.com/vietnamz/project-layout/cmd/prime_cal
 ```
+## How to build from local.
 
-## How to run.
-```mysql based
-./prime_cal
+```bash
+./scripts/build.sh
 ```
+
+## How to build dependencies on clean ubuntu 18.04 linux machine.
+
+```bash
+./scripts/build-dependencies.sh
+```
+## How to run.
+```bash
+./bin/prime
+```
+
+## How to use docker
+
+```bash
+docker-compose up -d --build
+```
+
+### Make sure port 5000 and 5001 are available for use.
+
+### access into UI via http://localhost:5000
+### testing api via http://localhost:5001/prime?number=56
+
+## AWS Host
+
+http://52.12.23.4/
