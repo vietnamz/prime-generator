@@ -11,13 +11,12 @@
                 </p>
             </div>
             <div class="text-editor">
-                <input id="input" type="text" value="" class="" v-model="upperBound">
-<!--                       v-model.lazy="upperBound"
-                       @blur="$v.upperBound.$touch()">-->
-<!--                <template v-if="$v.upperBound.$error">
+                <input id="input" type="text" value="" class=""
+                       v-model.lazy="upperBound"
+                       @blur="$v.upperBound.$touch()">
+                <template v-if="$v.upperBound.$error">
                     <span v-if="!$v.upperBound.mustBeNumber" class="warning text-highlight">The input must be numeric</span>
-                    <span v-else-if="!$v.upperBound.mustBeLessThan64Bit" class="form-error">Sorry! Apps currently support upper bound from 2 to 18446744073709551611 ( 2^64 )</span>
-                </template>-->
+                </template>
             </div>
             <div class="part-explanation">
                 <p class="cron-parts">
@@ -34,26 +33,24 @@ import { Vue } from 'vue-property-decorator';
 import {Prime} from "@/types";
 import PrimeService from "../services/PrimeService";
 import { validationMixin } from 'vuelidate';
-import { helpers } from 'vuelidate/lib/validators';
-import bigInt from 'big-integer';
+import { numeric } from 'vuelidate/lib/validators';
 
-const mustBeNumber = (value: string) => helpers.regex(value, RegExp('^[0-9]*$'))
-const mustBeLessThan64Bit = (value: string) => !mustBeNumber && !bigInt(value, 10).bitLength().greater( bigInt(64) )
 export default Vue.extend({
     data() {
         return {
             prime: {} as Prime, // Declaring reactive data as type User
-            upperBound: {} as string
+            upperBound: {} as string,
+            error: {} as string
         }
     },
     mixins: [validationMixin],
     validations: {
-        upperBound: { mustBeNumber, mustBeLessThan64Bit },
+        upperBound: { numeric },
     },
     mounted() {
         this.prime = {
             value: "0",
-            elasedTime: 0
+            elasedTime: "0"
         };
         this.upperBound = "0"
     },
@@ -64,12 +61,13 @@ export default Vue.extend({
     },
     methods: {
         takePrime() : void {
-/*            this.$v.$touch()
-            if (this.$v.$invalid) {
-                console.log("No action")
+            this.$v.upperBound.$touch()
+            if (this.$v.upperBound.$invalid) {
                 return
-            }*/
-            PrimeService.get(this.upperBound).then( res => this.prime.value = res.data).catch( err => console.log(err))
+            } else {
+                this.$v.$reset()
+            }
+            PrimeService.get(this.upperBound).then( res => this.prime.value = res.data.number).catch( err => (err))
         }
     }
 })

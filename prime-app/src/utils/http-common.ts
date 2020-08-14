@@ -1,7 +1,9 @@
 import axios from "axios";
 
+import endpoint from '../endpoint.config';
+
 const httpService = axios.create({
-    baseURL: "http://localhost:8080/",
+    baseURL: endpoint.BaseUrl,
     headers: {
         "Content-type": "application/json"
     }

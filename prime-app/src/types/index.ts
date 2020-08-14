@@ -1,4 +1,4 @@
 export interface Prime {
     value: string,
-    elasedTime: number
+    elasedTime: string
 }
