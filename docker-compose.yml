@@ -4,8 +4,8 @@ services:
   primeapp:
     image: delgemoon/primeapp:develop-build
     build:
-      context: ../../
-      dockerfile: ../../Dockerfile
+      context: ./
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     # export G_ID=$(id -g $(whoami))

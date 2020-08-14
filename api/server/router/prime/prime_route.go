@@ -3,7 +3,10 @@ package prime
 import (
 	"bytes"
 	"context"
+	"github.com/vietnamz/prime-generator/api/server/httputils"
+	"github.com/vietnamz/prime-generator/api/types"
 	"net/http"
+	"time"
 )
 
 func (s *primeRoute) primeHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, vars map[string]string) error {
@@ -20,7 +23,14 @@ func (s *primeRoute) primeHandler(ctx context.Context, w http.ResponseWriter, r 
 		_, err := w.Write(bytes.NewBufferString("number is required").Bytes())
 		return err
 	}
-	result := s.D.PrimeSrv.TakeLargestPrimes(key[0])
-	_, err := w.Write(bytes.NewBufferString(result).Bytes())
-	return err
+	start := time.Now()
+	result, err := s.D.PrimeSrv.TakeLargestPrimesV2(key[0])
+	elapse := time.Since(start)
+	if err != nil {
+		return err
+	}
+	var rv types.PrimeNumber
+	rv.Mtime = elapse.String()
+	rv.Number = result
+	return httputils.WriteJSON(w, http.StatusOK, rv)
 }

@@ -26,18 +26,18 @@ RUN set -e; \
     # Python3
     python3-pip python3-setuptools\
     # other
-    curl file gdb gdbserver ccache python3.6-dev \
+    curl file gdb gdbserver ccache python3.6-dev openssl nodejs npm\
     gcovr cppcheck doxygen rsync graphviz graphviz-dev unzip vim zip pkg-config; \
     apt-get -y clean
 
 # compiler clang-7, clang-9 and libc++ only on x86_64, for debug purpose
-RUN set -e; \
-    if [ `uname -m` = "x86_64" ]; then \
-      apt-get -y --no-install-recommends install \
-        clang-7 lldb-7 lld-7 libc++-7-dev libc++abi-7-dev clang-format-7 \
-        clang-9; \
-      apt-get -y clean; \
-    fi
+#RUN set -e; \
+#    if [ `uname -m` = "x86_64" ]; then \
+#      apt-get -y --no-install-recommends install \
+#        clang-7 lldb-7 lld-7 libc++-7-dev libc++abi-7-dev clang-format-7 \
+#        clang-9; \
+#      apt-get -y clean; \
+#    fi
 # golang stuff
 RUN curl https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz | tar -C /opt -xz
 ENV GOPATH=/opt/gopath

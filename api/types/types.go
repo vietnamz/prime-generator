@@ -1,9 +1,5 @@
 package types
 
-import (
-	"time"
-)
-
 // alias to a builder version
 // format MAJOR_MINOR_DATE
 // ex: 2020_1_2020/08/18
@@ -13,8 +9,8 @@ type BuilderVersion string
 // GET "/prime?number=123"
 // "number" is the upper bound value.
 type PrimeNumber struct {
-	Number     uint64       `json:"number"`
-	Mtime      time.Time   `json:"elapsed_time"`
+	Number     string       `json:"number"`
+	Mtime      string   `json:"elapsed_time"`
 }
 // Version contains response of Engine API:
 // GET "/version"

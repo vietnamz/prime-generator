@@ -16,7 +16,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/imdario/mergo v0.3.11
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
-	github.com/moby/moby v1.13.1
+	github.com/moby/moby v1.13.1 // indirect
 	github.com/moby/term v0.0.0-20200611042045-63b9a826fb74 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.1 // indirect
@@ -34,6 +34,7 @@ require (
 	github.com/vietnamz/project-layout v0.0.0-20200807183335-cab2f45c69bf // indirect
 	golang.org/x/sys v0.0.0-20200806125547-5acd03effb82 // indirect
 	golang.org/x/text v0.3.3 // indirect
+	golang.org/x/tools v0.0.0-20200813231717-0a73ddcff9b8 // indirect
 	gopkg.in/ini.v1 v1.57.0 // indirect
 	gotest.tools/v3 v3.0.2
 )
