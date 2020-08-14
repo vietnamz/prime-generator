@@ -7,6 +7,9 @@ With Go 1.14 [`Go Modules`](https://github.com/golang/go/wiki/Modules) are final
 * MacOS Catalina 10.15.1
 * Clang version 11.0.0
 * Go 1.14.6
+* Docker version 19.03.2, build 6a30dfc
+* docker-compose version 1.24.1, build 4667896b
+
 
 Originally, Build a simple CLI application. Consider using cobra [`Cobra`](https://github.com/spf13/cobra) a very powerful library to build cli.
 secondly, Logging is critical part. Should pay attention first to make sure, We can track our mistake during development. Consider using [`Logrus`](https://github.com/sirupsen/logrus)
@@ -16,7 +19,7 @@ secondly, Logging is critical part. Should pay attention first to make sure, We 
 
 ## How to build locally
 ```bash
-go build github.com/vietnamz/project-layout/cmd/prime_cal
+go build github.com/vietnamz/prime-generator/cmd/prime_cal
 ```
 ## How to build from local.
 
@@ -35,7 +38,7 @@ go build github.com/vietnamz/project-layout/cmd/prime_cal
 ```
 
 ## How to use docker
-
+at the root folder run below command. docker and docker compose are required.
 ```bash
 docker-compose up -d --build
 ```
