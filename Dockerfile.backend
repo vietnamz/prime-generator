@@ -31,13 +31,13 @@ RUN set -e; \
     apt-get -y clean
 
 # compiler clang-7, clang-9 and libc++ only on x86_64, for debug purpose
-#RUN set -e; \
-#    if [ `uname -m` = "x86_64" ]; then \
-#      apt-get -y --no-install-recommends install \
-#        clang-7 lldb-7 lld-7 libc++-7-dev libc++abi-7-dev clang-format-7 \
-#        clang-9; \
-#      apt-get -y clean; \
-#    fi
+RUN set -e; \
+    if [ `uname -m` = "x86_64" ]; then \
+      apt-get -y --no-install-recommends install \
+        clang-7 lldb-7 lld-7 libc++-7-dev libc++abi-7-dev clang-format-7 \
+        clang-9; \
+      apt-get -y clean; \
+    fi
 # golang stuff
 RUN curl https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz | tar -C /opt -xz
 ENV GOPATH=/opt/gopath
@@ -52,5 +52,8 @@ RUN set -e; \
     sh /tmp/cmake.sh --prefix=/usr/local --skip-license; \
     rm /tmp/cmake.sh
 ADD . /opt/app
+WORKDIR /opt/app
+
+RUN ./scripts/build.sh
 
 CMD ["/bin/bash"]

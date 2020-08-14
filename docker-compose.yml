@@ -2,12 +2,12 @@ version: '3'
 
 services:
   primeapp:
-    image: delgemoon/primeapp:develop-build
+    image: delgemoon/primeapp-be:develop-build
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.backend
     ports:
-      - "8080:8080"
+      - "5001:8080"
     # export G_ID=$(id -g $(whoami))
     # export U_ID=$(id -g $(whoami))
     user: ${U_ID:-0}:${G_ID:-0}
@@ -17,3 +17,21 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp:unconfined
+    command: ["./bin/prime"]
+  ui:
+    image: delgemoon/prime-fe:develop-build
+    build:
+      context: ./
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5000:5000"
+    # export G_ID=$(id -g $(whoami))
+    # export U_ID=$(id -g $(whoami))
+    user: ${U_ID:-0}:${G_ID:-0}
+    tty: true
+    working_dir: /opt/app
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+
