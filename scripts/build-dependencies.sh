@@ -7,7 +7,7 @@ set -e
 
 echo "********building dependencies for dev server ******"
 
-if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
+#if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
 
 # Get the parent directory of where this script is.
 SOURCE="${BASH_SOURCE[0]}"
@@ -17,9 +17,9 @@ DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 # Change into that directory
 cd "$DIR"
 
-apt-get update &&
-apt-get -y --no-install-recommends install apt-utils software-properties-common wget gpg-agent;
-apt-get -y clean
+sudo apt-get update &&
+sudo apt-get -y --no-install-recommends install apt-utils software-properties-common wget gpg-agent;
+sudo apt-get -y clean
 
 add-apt-repository -y ppa:ubuntu-toolchain-r/test;
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 apt-key add -;
@@ -35,7 +35,7 @@ apt-get -y install git ssh tar gzip ca-certificates gnupg
 # Python3
 apt-get -y install python3-pip python3-setuptools
 # other
-apt-get -y install curl file gdb gdbserver ccache python3.6-dev
+apt-get -y install curl file gdb gdbserver ccache python3.6-dev openssl nodejs npm nginx
 apt-get -y install gcovr cppcheck doxygen rsync graphviz graphviz-dev unzip vim zip pkg-config;
 apt-get -y clean
 
