@@ -10,11 +10,11 @@ import (
 
 const (
 	// DefaultCaFile is the default filename for the CA pem file
-	DefaultCaFile = "ca.pem"
+	DefaultCaFile = "configs/ca.pem"
 	// DefaultKeyFile is the default filename for the key pem file
-	DefaultKeyFile = "key.pem"
+	DefaultKeyFile = "configs/key.pem"
 	// DefaultCertFile is the default filename for the cert pem file
-	DefaultCertFile = "cert.pem"
+	DefaultCertFile = "configs/cert.pem"
 	// FlagTLSVerify is the flag name for the TLS verification option
 	FlagTLSVerify = "tlsverify"
 )
