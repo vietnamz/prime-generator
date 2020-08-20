@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile.backend
     ports:
       - "5001:8080"
+    environment:
+      - TF_DEV=true
     # export G_ID=$(id -g $(whoami))
     # export U_ID=$(id -g $(whoami))
     user: ${U_ID:-0}:${G_ID:-0}

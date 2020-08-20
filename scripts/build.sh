@@ -33,6 +33,10 @@ if [[ -n "${TF_DEV}" ]]; then
     # Allow LD_FLAGS to be appended during development compilations
     LD_FLAGS="-X main.GitCommit=${GIT_COMMIT}${GIT_DIRTY} $LD_FLAGS"
 fi
+echo "==> Envs :"
+echo "TF_DEV=${TF_DEV}"
+echo "XC_OS=$XC_OS"
+echo "XC_ARCH=$XC_ARCH"
 
 if ! which gox > /dev/null; then
     echo "==> Installing gox..."
